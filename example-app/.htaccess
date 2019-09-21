@@ -1,0 +1,79 @@
+RewriteEngine On
+RewriteBase /
+
+# Disallow access to .htaccess and .htpasswd (Done already in httpd.conf)
+#RewriteRule ^\.htaccess$ - [F]
+#RewriteRule ^\.htpasswd$ - [F]
+
+# Redirect to HTTPS (Done automatically by Google Cloud Run)
+#RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#RewriteCond %{HTTPS} off
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+
+# Redirect to root for unknown routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !=/server-status
+RewriteCond %{REQUEST_URI} !=/server-info
+RewriteCond %{REQUEST_URI} !=/php-info
+RewriteRule (.*) / [L]
+
+# Content compression
+#<ifmodule mod_deflate.c>
+
+    # text
+    AddOutputFilterByType DEFLATE \
+        text/text \
+        text/html \
+        text/plain \
+        text/xml
+
+    # json
+    AddOutputFilterByType DEFLATE \
+        application/json
+
+    # js
+    AddOutputFilterByType DEFLATE \
+        application/javascript
+
+    # css
+    AddOutputFilterByType DEFLATE \
+        text/css
+
+    # images (only svg, other ones are already compressed)
+    AddOutputFilterByType DEFLATE \
+        image/svg+xml
+
+    <FilesMatch "\.(js|css|otf|ttf|woff|woff2|eot|svg)$">
+        SetOutputFilter DEFLATE
+    </FilesMatch>
+
+#</ifmodule>
+
+# Infinite cache
+#<ifModule mod_expires.c>
+
+    <FilesMatch "\.(js|css|otf|ttf|woff|woff2|eot|svg|ico|png|gif|jpe?g)$">
+        ExpiresActive On
+        ExpiresDefault "access plus 31536000 seconds"
+    </FilesMatch>
+
+#</ifModule>
+
+#<ifModule mod_headers.c>
+
+    <filesMatch "\.(js)$">
+        Header set Pragma "cache"
+        Header set Cache-Control "private, max-age=31536000"
+        Header unset ETag
+        Header unset Last-Modified
+    </filesMatch>
+
+    <filesMatch "\.(css|otf|ttf|woff|woff2|eot|svg|ico|png|gif|jpe?g)$">
+        Header set Pragma "cache"
+        Header set Cache-Control "public, max-age=31536000"
+        Header unset ETag
+        Header unset Last-Modified
+    </filesMatch>
+
+#</ifModule>
