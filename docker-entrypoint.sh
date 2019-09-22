@@ -1,20 +1,13 @@
-#!/bin/bash -e
+#!/bin/bash
 
-#echo "Starting Apache..."
-#service apache2 start
+# Exit when any command fails
+set -e
 
+# Set by Dockerfile
 PHP_VERSION=""
-
-# if [[ -z "$PHP_VERSION" ]]
-# then
-#   echo "PHP-PFM not started. No PHP version provided"
-# else
-#   service "php$PHP_VERSION-fpm" start
-# fi
 
 # Update PATH to include nodejs and yarn
 export PATH="/usr/lib/nodejs/bin:/usr/lib/yarn/bin:$PATH"
-#echo "$PATH" && echo ""
 
 apache2ctl -v && echo ""
 php -v && echo ""

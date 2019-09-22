@@ -117,7 +117,7 @@ RUN tar -xf /tmp/yarn.tar.gz -C /tmp/ && mv "/tmp/`ls /tmp | egrep 'yarn-v.*' | 
 #
 # Cleanup
 #
-RUN rm -r /tmp/*
+RUN rm -rf /tmp/*
 
 #
 # Docker

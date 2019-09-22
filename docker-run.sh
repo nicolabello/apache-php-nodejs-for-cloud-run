@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit when any command fails
+set -e
+
 appFolder=${1:-"example-app"}
 
 scriptPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
