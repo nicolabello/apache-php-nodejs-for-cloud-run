@@ -70,8 +70,11 @@ RUN a2enmod php${PHP_VERSION}
 # Add phpinfo
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php && a2enconf x-phpinfo
 
+# Enable error log
+RUN sed -i '/error_log = php_errors.log/c\error_log = /var/log/php_errors.log' /etc/php/${PHP_VERSION}/apache2/php.ini
+
 # Forward logs to docker
-# By default no logs are enabled in php.ini
+RUN ln -sf /dev/stderr /var/log/php_errors.log
 
 #
 # PHP-FPM
@@ -113,6 +116,9 @@ RUN tar -xf /tmp/nodejs.tar.gz -C /tmp/ && mv /tmp/node-v${NODEJS_VERSION}-linux
 # Download and extract
 ADD https://yarnpkg.com/latest.tar.gz /tmp/yarn.tar.gz
 RUN tar -xf /tmp/yarn.tar.gz -C /tmp/ && mv "/tmp/`ls /tmp | egrep 'yarn-v.*' | head -1`" /usr/lib/yarn
+
+# Add to path
+#RUN echo 'export PATH="/usr/lib/yarn/bin:$PATH"' >> /etc/profile.d/yarn.sh && chmod a+x /etc/profile.d/yarn.sh
 
 #
 # Cleanup
