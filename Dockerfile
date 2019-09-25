@@ -106,7 +106,7 @@ ADD https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64
 RUN tar -xf /tmp/nodejs.tar.gz -C /tmp/ && mv /tmp/node-v${NODEJS_VERSION}-linux-x64 /usr/lib/nodejs
 
 # Add to path
-#RUN echo 'export PATH="/usr/lib/nodejs/bin:$PATH"' >> /etc/profile.d/nodejs.sh && chmod a+x /etc/profile.d/nodejs.sh
+ENV PATH="/usr/lib/nodejs/bin:$PATH"
 
 #
 # Yarn
@@ -118,7 +118,7 @@ ADD https://yarnpkg.com/latest.tar.gz /tmp/yarn.tar.gz
 RUN tar -xf /tmp/yarn.tar.gz -C /tmp/ && mv "/tmp/`ls /tmp | egrep 'yarn-v.*' | head -1`" /usr/lib/yarn
 
 # Add to path
-#RUN echo 'export PATH="/usr/lib/yarn/bin:$PATH"' >> /etc/profile.d/yarn.sh && chmod a+x /etc/profile.d/yarn.sh
+ENV PATH="/usr/lib/yarn/bin:$PATH"
 
 #
 # Cleanup
@@ -138,19 +138,6 @@ EXPOSE 8080
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /
-RUN sed -i '/PHP_VERSION=/c\PHP_VERSION="${PHP_VERSION}"' /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
-####################################
-
-#
-# Example app
-#
-
-# Add vhosts
-#COPY ./example-app/example-app-vhost.conf /vhosts/
-
-# Copy app
-#COPY ./example-app/ /apps/example-app/
