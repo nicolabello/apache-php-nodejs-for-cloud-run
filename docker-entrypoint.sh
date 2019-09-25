@@ -13,7 +13,6 @@ echo "---------------------------------------------------"
 # Start services
 service "php$PHP_VERSION-fpm" start
 apachectl -D FOREGROUND
-echo "Apache started"
 
 # Keep image alive
 #tail -f /dev/null
