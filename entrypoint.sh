@@ -10,6 +10,12 @@ echo "Node.js `node -v`" && echo "NPM `npm -v`" && echo "Yarn `yarn -v`" && echo
 
 echo "---------------------------------------------------"
 
+# Execute /entrypoint-extra.sh if found
+if [[ -f /entrypoint-extra.sh ]]; then
+    chmod +x /entrypoint-extra.sh
+    sh /entrypoint-extra.sh
+fi
+
 # Start services
 service "php$PHP_VERSION-fpm" start
 apachectl -D FOREGROUND

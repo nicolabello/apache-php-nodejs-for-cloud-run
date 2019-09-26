@@ -14,6 +14,11 @@ Created from [bitnami/minideb](https://hub.docker.com/r/bitnami/minideb) and ove
 - **PHP 7.3** and **PHP-FPM**
 - **Node.js 12** and **Yarn** latest
 
+## Extra startup commands
+
+Create the file `/entrypoint-extra.sh` and add in it the extra startup commands to be executed.
+They will be executed before starting Apache.
+
 ## How to deploy
 
 Refer to [Cloud Run documentation](https://cloud.google.com/run/docs/) for deploying to Google Cloud Run.
