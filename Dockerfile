@@ -13,11 +13,6 @@ RUN install_packages apache2 libapache2-mod-security2 libapache2-mod-evasive
 # Add configs
 COPY apache/ /etc/apache2/
 
-# Generate htaccess for password protected modules routes (/server-info and /server-status)
-#ENV MODULES_AUTH_USER admin
-#ENV MODULES_AUTH_PWD password
-#RUN htpasswd -b -c /etc/apache2/mods-available/.htpasswd "${MODULES_AUTH_USER}" "${MODULES_AUTH_PWD}"
-
 # Enable configs
 RUN a2enconf x-base x-logs x-security
 
@@ -62,7 +57,7 @@ RUN ln -sf /dev/stdout /var/log/apache2/modsec_audit.log
 ENV PHP_VERSION 7.3
 
 # Install
-RUN install_packages libapache2-mod-php${PHP_VERSION} php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-fpm php-pear
+RUN install_packages libapache2-mod-php${PHP_VERSION} php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-fpm php${PHP_VERSION}-mysqli php-pear
 
 # Enable modules
 RUN a2enmod php${PHP_VERSION}
@@ -121,13 +116,11 @@ RUN tar -xf /tmp/yarn.tar.gz -C /tmp/ && mv "/tmp/`ls /tmp | egrep 'yarn-v.*' | 
 ENV PATH "/usr/lib/yarn/bin:$PATH"
 
 #
-# Cleanup
+# Misc
 #
-RUN rm -rf /tmp/*
 
-#
-# Docker
-#
+# Cleanup
+RUN rm -rf /tmp/*
 
 # Create folder's symbolic links
 RUN ln -sf /var/www /apps
@@ -137,7 +130,6 @@ RUN ln -sf /etc/apache2/sites-enabled /vhosts
 EXPOSE 8080
 
 # Add entrypoint
-COPY ./docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY ./entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
