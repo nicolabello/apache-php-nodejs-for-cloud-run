@@ -104,7 +104,7 @@ ADD https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64
 RUN tar -xf /tmp/nodejs.tar.gz -C /tmp/ && mv /tmp/node-v${NODEJS_VERSION}-linux-x64 /usr/lib/nodejs
 
 # Add to path
-ENV PATH "/usr/lib/nodejs/bin:$PATH"
+RUN ln -sf /usr/lib/nodejs/bin/* /usr/bin/
 
 #
 # Yarn
@@ -116,7 +116,7 @@ ADD https://yarnpkg.com/latest.tar.gz /tmp/yarn.tar.gz
 RUN tar -xf /tmp/yarn.tar.gz -C /tmp/ && mv "/tmp/`ls /tmp | egrep 'yarn-v.*' | head -1`" /usr/lib/yarn
 
 # Add to path
-ENV PATH "/usr/lib/yarn/bin:$PATH"
+RUN ln -sf /usr/lib/yarn/bin/* /usr/bin/
 
 #
 # Misc
