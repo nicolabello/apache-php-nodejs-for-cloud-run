@@ -57,7 +57,7 @@ RUN ln -sf /dev/stdout /var/log/apache2/modsec_audit.log
 ENV PHP_VERSION 7.3
 
 # Install
-RUN install_packages libapache2-mod-php${PHP_VERSION} php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-fpm php${PHP_VERSION}-mysqli php-pear
+RUN install_packages libapache2-mod-php${PHP_VERSION} php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-fpm php-pear
 
 # Enable modules
 RUN a2enmod php${PHP_VERSION}
@@ -83,8 +83,11 @@ RUN a2enmod proxy_fcgi setenvif
 # Enable config (As pointed out during installation)
 RUN a2enconf php${PHP_VERSION}-fpm
 
-# Change PHP-FPM listen address
+# Change listen address
 RUN sed -i '/listen = /c\listen = 127.0.0.1:9000' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+
+# Preserve environment variables
+RUN sed -i '/clear_env = /c\clear_env = no' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
 # Forward logs to docker
 RUN ln -sf /dev/stderr /var/log/php${PHP_VERSION}-fpm.log
