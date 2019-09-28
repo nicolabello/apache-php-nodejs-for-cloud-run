@@ -17,9 +17,9 @@ COPY apache/ /etc/apache2/
 RUN a2enconf x-base x-logs x-security
 
 # Enable modules
-RUN a2enmod rewrite deflate expires headers
-RUN a2enmod info status
-RUN a2enmod evasive
+RUN a2enmod rewrite deflate expires headers &&\
+    a2enmod info status &&\
+    a2enmod evasive
 
 # Forward logs to docker
 RUN ln -sf /dev/stdout /var/log/apache2/access.log &&\
@@ -87,7 +87,7 @@ RUN a2enconf php${PHP_VERSION}-fpm
 RUN sed -i '/listen = /c\listen = 127.0.0.1:9000' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
 # Preserve environment variables
-RUN sed -i '/clear_env = /c\clear_env = no' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+# RUN sed -i '/clear_env = /c\clear_env = no' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
 # Forward logs to docker
 RUN ln -sf /dev/stderr /var/log/php${PHP_VERSION}-fpm.log
