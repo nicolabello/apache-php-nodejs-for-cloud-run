@@ -5,4 +5,5 @@ set -e
 
 tag="nicolabello/apache-php-nodejs-for-cloud-run:latest"
 
-docker build --rm -t "$tag" .
+# Build
+docker build --pull --rm -t "$tag" .

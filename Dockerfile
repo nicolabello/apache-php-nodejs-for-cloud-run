@@ -17,9 +17,9 @@ COPY apache/ /etc/apache2/
 RUN a2enconf x-base x-logs x-security
 
 # Enable modules
-RUN a2enmod rewrite deflate expires headers
-RUN a2enmod info status
-RUN a2enmod evasive
+RUN a2enmod rewrite deflate expires headers &&\
+    a2enmod info status &&\
+    a2enmod evasive
 
 # Forward logs to docker
 RUN ln -sf /dev/stdout /var/log/apache2/access.log &&\
@@ -57,7 +57,7 @@ RUN ln -sf /dev/stdout /var/log/apache2/modsec_audit.log
 ENV PHP_VERSION 7.3
 
 # Install
-RUN install_packages libapache2-mod-php${PHP_VERSION} php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-fpm php${PHP_VERSION}-mysqli php-pear
+RUN install_packages libapache2-mod-php${PHP_VERSION} php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-fpm php-pear
 
 # Enable modules
 RUN a2enmod php${PHP_VERSION}
@@ -83,8 +83,11 @@ RUN a2enmod proxy_fcgi setenvif
 # Enable config (As pointed out during installation)
 RUN a2enconf php${PHP_VERSION}-fpm
 
-# Change PHP-FPM listen address
+# Change listen address
 RUN sed -i '/listen = /c\listen = 127.0.0.1:9000' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+
+# Preserve environment variables
+# RUN sed -i '/clear_env = /c\clear_env = no' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
 # Forward logs to docker
 RUN ln -sf /dev/stderr /var/log/php${PHP_VERSION}-fpm.log
@@ -101,7 +104,7 @@ ADD https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64
 RUN tar -xf /tmp/nodejs.tar.gz -C /tmp/ && mv /tmp/node-v${NODEJS_VERSION}-linux-x64 /usr/lib/nodejs
 
 # Add to path
-ENV PATH "/usr/lib/nodejs/bin:$PATH"
+RUN ln -sf /usr/lib/nodejs/bin/* /usr/bin/
 
 #
 # Yarn
@@ -113,7 +116,7 @@ ADD https://yarnpkg.com/latest.tar.gz /tmp/yarn.tar.gz
 RUN tar -xf /tmp/yarn.tar.gz -C /tmp/ && mv "/tmp/`ls /tmp | egrep 'yarn-v.*' | head -1`" /usr/lib/yarn
 
 # Add to path
-ENV PATH "/usr/lib/yarn/bin:$PATH"
+RUN ln -sf /usr/lib/yarn/bin/* /usr/bin/
 
 #
 # Misc

@@ -3,8 +3,6 @@
 # Exit when any command fails
 set -e
 
-appFolder=${1:-"example-app"}
-
 tag="nicolabello/apache-php-nodejs-for-cloud-run:latest"
 
 # Stop, build and run
