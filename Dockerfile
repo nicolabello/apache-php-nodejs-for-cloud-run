@@ -129,7 +129,7 @@ RUN ln -sf /usr/lib/yarn/bin/* /usr/bin/
 RUN a2dismod php${PHP_VERSION}
 
 # Use MPM Worker
-RUN a2dismod mpm_prefork && a2enmod mpm_worker
+RUN a2dismod mpm_prefork && a2enmod mpm_event
 
 # Disable CustomLog
 RUN a2disconf other-vhosts-access-log
