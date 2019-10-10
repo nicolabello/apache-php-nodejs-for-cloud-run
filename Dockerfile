@@ -37,6 +37,9 @@ RUN a2enmod unique_id security2
 # Enable config
 RUN mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
 
+# Set logging format
+RUN sed -i '/SecAuditLogParts/c\SecAuditLogParts AHZ' /etc/modsecurity/modsecurity.conf
+
 # OWASP ModSecurity Core Rule Set
 ENV MODSECURITY_CRS_VERSION 3.1.1
 
@@ -117,6 +120,19 @@ RUN tar -xf /tmp/yarn.tar.gz -C /tmp/ && mv "/tmp/`ls /tmp | egrep 'yarn-v.*' | 
 
 # Add to path
 RUN ln -sf /usr/lib/yarn/bin/* /usr/bin/
+
+#
+# Optimizations
+#
+
+# Disable PHP (PHP-FPM will be used instead)
+RUN a2dismod php${PHP_VERSION}
+
+# Use MPM Worker
+RUN a2dismod mpm_prefork && a2enmod mpm_event
+
+# Disable CustomLog
+RUN a2disconf other-vhosts-access-log
 
 #
 # Misc
