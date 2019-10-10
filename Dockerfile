@@ -11,7 +11,7 @@ FROM bitnami/minideb:latest
 RUN install_packages apache2 libapache2-mod-security2 libapache2-mod-evasive
 
 # Add configs
-COPY apache/ /etc/apache2/
+COPY ./apache/ /etc/apache2/
 
 # Enable configs
 RUN a2enconf x-base x-logs x-security
