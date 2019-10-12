@@ -68,7 +68,7 @@ RUN a2enmod php${PHP_VERSION}
 # Add phpinfo
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php && a2enconf x-phpinfo
 
-# Enable error log
+# Set error log file
 RUN sed -i '/error_log = php_errors.log/c\error_log = /var/log/php_errors.log' /etc/php/${PHP_VERSION}/apache2/php.ini
 
 # Forward logs to docker
@@ -85,6 +85,9 @@ RUN a2enmod proxy_fcgi setenvif
 
 # Enable config (As pointed out during installation)
 RUN a2enconf php${PHP_VERSION}-fpm
+
+# Set error log file
+RUN sed -i '/error_log = php_errors.log/c\error_log = /var/log/php_errors.log' /etc/php/${PHP_VERSION}/fpm/php.ini
 
 # Change listen address
 RUN sed -i '/listen = /c\listen = 127.0.0.1:9000' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
