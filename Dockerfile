@@ -38,7 +38,7 @@ RUN a2enmod unique_id security2
 RUN mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
 
 # Set logging format
-RUN sed -i '/SecAuditLogParts/c\SecAuditLogParts AHZ' /etc/modsecurity/modsecurity.conf
+RUN sed -i "/SecAuditLogParts/c\SecAuditLogParts AHZ" /etc/modsecurity/modsecurity.conf
 
 # OWASP ModSecurity Core Rule Set
 ENV MODSECURITY_CRS_VERSION 3.1.1
@@ -68,8 +68,8 @@ RUN a2enmod php${PHP_VERSION}
 # Add phpinfo
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php && a2enconf x-phpinfo
 
-# Enable error log
-RUN sed -i '/error_log = php_errors.log/c\error_log = /var/log/php_errors.log' /etc/php/${PHP_VERSION}/apache2/php.ini
+# Set error log file
+RUN sed -i "/error_log = php_errors.log/c\error_log = /var/log/php_errors.log" /etc/php/${PHP_VERSION}/apache2/php.ini
 
 # Forward logs to docker
 RUN ln -sf /dev/stderr /var/log/php_errors.log
@@ -86,11 +86,14 @@ RUN a2enmod proxy_fcgi setenvif
 # Enable config (As pointed out during installation)
 RUN a2enconf php${PHP_VERSION}-fpm
 
+# Set error log file
+RUN sed -i "/error_log = php_errors.log/c\error_log = /var/log/php_errors.log" /etc/php/${PHP_VERSION}/fpm/php.ini
+
 # Change listen address
-RUN sed -i '/listen = /c\listen = 127.0.0.1:9000' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+RUN sed -i "/listen = /c\listen = 127.0.0.1:9000" /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
 # Preserve environment variables
-# RUN sed -i '/clear_env = /c\clear_env = no' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+# RUN sed -i "/clear_env = /c\clear_env = no" /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
 # Forward logs to docker
 RUN ln -sf /dev/stderr /var/log/php${PHP_VERSION}-fpm.log
