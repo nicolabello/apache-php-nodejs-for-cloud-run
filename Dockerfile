@@ -41,7 +41,7 @@ RUN mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurit
 RUN sed -i "/SecAuditLogParts/c\SecAuditLogParts AHZ" /etc/modsecurity/modsecurity.conf
 
 # OWASP ModSecurity Core Rule Set
-ENV MODSECURITY_CRS_VERSION 3.1.1
+ENV MODSECURITY_CRS_VERSION 3.2.0
 
 # Download and extract
 ADD https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/v${MODSECURITY_CRS_VERSION}.tar.gz /tmp/modsecurity-crs.tar.gz
@@ -103,7 +103,7 @@ RUN ln -sf /dev/stderr /var/log/php${PHP_VERSION}-fpm.log
 # https://github.com/nodejs/help/wiki/Installation
 #
 
-ENV NODEJS_VERSION 12.10.0
+ENV NODEJS_VERSION 12.14.0
 
 # Download and extract
 ADD https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.gz /tmp/nodejs.tar.gz
