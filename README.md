@@ -11,7 +11,7 @@ This container has been created for [Google Cloud Run](https://cloud.google.com/
 Created from [bitnami/minideb](https://hub.docker.com/r/bitnami/minideb) and overloaded with:
 
 - **Apache 2.4** and **ModSecurity** (Including **OWASP ModSecurity CRS**)
-- **PHP 7.4** and **PHP-FPM**
+- **PHP 7.3** and **PHP-FPM**
 - **Node.js 12** and **Yarn** latest
 
 ## Extra startup commands

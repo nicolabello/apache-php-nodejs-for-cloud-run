@@ -57,7 +57,7 @@ RUN ln -sf /dev/stdout /var/log/apache2/modsec_audit.log
 # PHP
 #
 
-ENV PHP_VERSION 7.4
+ENV PHP_VERSION 7.3
 
 # Install
 RUN install_packages libapache2-mod-php${PHP_VERSION} php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-fpm php-pear
