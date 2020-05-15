@@ -103,7 +103,7 @@ RUN ln -sf /dev/stderr /var/log/php${PHP_VERSION}-fpm.log
 # https://github.com/nodejs/help/wiki/Installation
 #
 
-ENV NODEJS_VERSION 12.16.1
+ENV NODEJS_VERSION 12.16.3
 
 # Download and extract
 ADD https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.gz /tmp/nodejs.tar.gz
